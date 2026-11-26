@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AgendaProvider } from "@/components/AgendaProvider";
 import { Booking } from "@/components/Booking";
-import { HeroTriggers } from "@/components/HeroTriggers";
+import { CountdownInline } from "@/components/Countdown";
 import { Scarcity } from "@/components/Scarcity";
 import { StickyCta } from "@/components/StickyCta";
 import { campaign, development, faq } from "@/config/campaign";
@@ -67,7 +67,9 @@ export default function Home() {
         <div className="tricolor" aria-hidden />
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-0.5 px-5 py-2.5">
           <p>Plantão presencial em 27, 28 e 29 de novembro</p>
-          <p className="text-mist">Agendamento gratuito, em {campaign.city}</p>
+          <p>
+            <CountdownInline />
+          </p>
         </div>
       </div>
 
@@ -117,10 +119,22 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Gatilhos: prazo, três dias e horários livres (dados reais) */}
-              <div className="rise rise-3">
-                <HeroTriggers />
-              </div>
+              {/* Condições em destaque da campanha */}
+              <ul className="rise rise-3 grid gap-3">
+                {campaign.offers.map((o) => (
+                  <li
+                    key={o.label}
+                    className="flex items-center gap-4 rounded-3xl border border-gold/50 bg-ink/80 px-5 py-4 backdrop-blur-sm sm:gap-5 sm:px-6 sm:py-5"
+                  >
+                    <span className="w-[8.75rem] shrink-0 whitespace-nowrap font-display text-[1.9rem] leading-none text-gold-soft sm:w-[13.5rem] sm:text-[2.75rem]">
+                      {o.value}
+                    </span>
+                    <span className="text-base font-semibold leading-snug text-paper sm:text-lg">
+                      {o.label}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Gatilhos de benefício e exclusividade */}
@@ -138,8 +152,9 @@ export default function Home() {
             <p className="mt-8 max-w-2xl text-xs leading-relaxed text-mist/80">
               {campaign.showDecemberOffer &&
                 "Primeira parcela da entrada em dezembro de 2026, conforme as condições aplicáveis e as unidades participantes. "}
-              Financiamento sujeito à análise de crédito e às regras do programa Minha Casa Minha
-              Vida. Imagens meramente ilustrativas.
+              Condições de entrada, documentação e parcelas conforme a tabela vigente e as unidades
+              participantes. Financiamento sujeito à análise de crédito e às regras do programa
+              Minha Casa Minha Vida. Imagens meramente ilustrativas.
             </p>
           </div>
         </section>

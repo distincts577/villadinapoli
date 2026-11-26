@@ -36,6 +36,16 @@ export const campaign = {
    */
   showDecemberOffer: true,
 
+  /**
+   * Condições em destaque na primeira tela. Para mudar o texto ou tirar
+   * uma delas, edite esta lista (value = destaque grande, label = legenda).
+   */
+  offers: [
+    { value: "48x", label: "Entrada totalmente parcelada em 48 vezes" },
+    { value: "Grátis", label: "Documentação grátis" },
+    { value: "R$ 1.000", label: "Parcelas de mil reais" },
+  ],
+
   /** Faixas de renda do formulário (campo opcional). Ajuste se quiser. */
   incomeRanges: [
     "Até R$ 3.000",
