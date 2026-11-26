@@ -35,7 +35,7 @@ export function StickyCta() {
       }`}
     >
       <a href="#agenda" tabIndex={hidden ? -1 : 0} className="btn-gold w-full">
-        Reservar meu horário
+        Agende seu horário
       </a>
     </div>
   );

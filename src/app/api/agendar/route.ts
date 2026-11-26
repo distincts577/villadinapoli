@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isDbConfigured, withTimeout } from "@/lib/db";
+import { isDbConfigured } from "@/lib/db";
 import { createBooking } from "@/lib/schedule";
 import { clientKey, rateLimit, sameOrigin } from "@/lib/security";
 import { bookingSchema } from "@/lib/validation";
@@ -52,26 +52,22 @@ export async function POST(req: Request) {
   }
 
   try {
-    if (!(await withTimeout(() => rateLimit("booking", clientKey(req), 30, 10)))) {
+    if (!(await rateLimit("booking", clientKey(req), 30, 10))) {
       return fail(429, "rate_limited", "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente de novo.");
     }
 
-    const result = await withTimeout(
-      () =>
-        createBooking({
-          slotId: data.slotId,
-          name: data.name.replace(/\s+/g, " "),
-          whatsapp: data.whatsapp,
-          email: data.email,
-          incomeRange: data.incomeRange,
-          marketingOptIn: data.marketingOptIn,
-          utmSource: data.utmSource,
-          utmMedium: data.utmMedium,
-          utmCampaign: data.utmCampaign,
-          broker: data.broker,
-        }),
-      12000,
-    );
+    const result = await createBooking({
+      slotId: data.slotId,
+      name: data.name.replace(/\s+/g, " "),
+      whatsapp: data.whatsapp,
+      email: data.email,
+      incomeRange: data.incomeRange,
+      marketingOptIn: data.marketingOptIn,
+      utmSource: data.utmSource,
+      utmMedium: data.utmMedium,
+      utmCampaign: data.utmCampaign,
+      broker: data.broker,
+    });
 
     if (!result.ok) {
       return fail(409, result.reason, messages[result.reason]);

@@ -30,6 +30,9 @@ export function Scarcity() {
           <div className="mt-8">
             <CountdownLarge />
           </div>
+          <a href="#agenda" className="btn-gold mt-8 w-full sm:w-auto">
+            Agende seu horário
+          </a>
 
           {units && (
             <div className="mt-8 max-w-md rounded-2xl border border-gold/40 bg-ink-2 p-5">

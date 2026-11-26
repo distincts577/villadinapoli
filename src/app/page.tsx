@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AgendaProvider } from "@/components/AgendaProvider";
-import { Booking, HeroDates } from "@/components/Booking";
-import { CountdownInline } from "@/components/Countdown";
+import { Booking } from "@/components/Booking";
+import { HeroTriggers } from "@/components/HeroTriggers";
 import { Scarcity } from "@/components/Scarcity";
 import { StickyCta } from "@/components/StickyCta";
 import { campaign, development, faq } from "@/config/campaign";
@@ -28,6 +28,15 @@ function Lock() {
       <rect x="4.5" y="10.5" width="15" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8 10.5V8a4 4 0 018 0v2.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
     </svg>
+  );
+}
+
+/** Botão de chamada: sempre leva à agenda, que fica no final da página. */
+function Cta({ children = "Agende seu horário", className = "" }: { children?: string; className?: string }) {
+  return (
+    <a href="#agenda" className={`btn-gold w-full sm:w-auto ${className}`}>
+      {children}
+    </a>
   );
 }
 
@@ -58,9 +67,7 @@ export default function Home() {
         <div className="tricolor" aria-hidden />
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-0.5 px-5 py-2.5">
           <p>Plantão presencial em 27, 28 e 29 de novembro</p>
-          <p>
-            <CountdownInline />
-          </p>
+          <p className="text-mist">Agendamento gratuito, em {campaign.city}</p>
         </div>
       </div>
 
@@ -89,43 +96,46 @@ export default function Home() {
               className="h-auto w-28 sm:w-44"
             />
 
-            <div className="mt-7 max-w-2xl sm:mt-14">
-              <p className="rise text-base font-semibold text-gold-soft">
-                Black November Villa di Napoli, em {campaign.city}
-              </p>
-              <h1 className="rise rise-2 mt-3 text-[2.3rem] sm:text-6xl lg:text-[4.25rem]">
-                {campaign.showDecemberOffer
-                  ? "Seu primeiro imóvel pode começar a ser pago só em dezembro"
-                  : "Seu primeiro imóvel merece uma oportunidade especial"}
-              </h1>
-              <p className="rise rise-3 mt-5 max-w-xl text-paper/90 sm:text-lg">
-                O Villa di Napoli preparou uma Black November especial para quem deseja sair do
-                aluguel e conquistar o primeiro lar pelo Minha Casa Minha Vida. Participe do nosso
-                plantão presencial e descubra as condições preparadas para esta campanha.
-              </p>
+            <div className="mt-7 grid gap-8 sm:mt-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-12">
+              <div>
+                <p className="rise text-base font-semibold text-gold-soft">
+                  Black November Villa di Napoli, em {campaign.city}
+                </p>
+                <h1 className="rise rise-2 mt-3 text-[2.3rem] sm:text-6xl lg:text-[4rem]">
+                  {campaign.showDecemberOffer
+                    ? "Seu primeiro imóvel pode começar a ser pago só em dezembro"
+                    : "Seu primeiro imóvel merece uma oportunidade especial"}
+                </h1>
+                <p className="rise rise-3 mt-5 max-w-xl text-paper/90 sm:text-lg">
+                  O Villa di Napoli preparou uma Black November especial para quem deseja sair do
+                  aluguel e conquistar o primeiro lar pelo Minha Casa Minha Vida. Participe do
+                  nosso plantão presencial e descubra as condições preparadas para esta campanha.
+                </p>
+                <div className="rise rise-3 mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <Cta />
+                  <p className="text-sm text-mist">Gratuito. Leva menos de um minuto.</p>
+                </div>
+              </div>
+
+              {/* Gatilhos: prazo, três dias e horários livres (dados reais) */}
+              <div className="rise rise-3">
+                <HeroTriggers />
+              </div>
             </div>
 
-            <div className="rise rise-3 mt-7">
-              <p className="mb-3 text-sm text-mist">Escolha o seu dia, em novembro de 2026</p>
-              <HeroDates />
-            </div>
-
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <a href="#agenda" className="btn-gold w-full sm:w-auto">
-                Reservar meu horário
-              </a>
-              <p className="text-sm text-mist">Gratuito. Leva menos de um minuto.</p>
-            </div>
-
-            <ul className="mt-10 grid max-w-2xl gap-x-8 gap-y-3 sm:grid-cols-2">
+            {/* Gatilhos de benefício e exclusividade */}
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {heroHighlights.map((h) => (
-                <li key={h} className="flex gap-3 text-paper/95">
+                <li
+                  key={h}
+                  className="flex gap-3 rounded-2xl border border-line bg-ink/70 px-4 py-4 text-paper/95 backdrop-blur-sm"
+                >
                   <Check /> {h}
                 </li>
               ))}
             </ul>
 
-            <p className="mt-10 max-w-2xl text-xs leading-relaxed text-mist/80">
+            <p className="mt-8 max-w-2xl text-xs leading-relaxed text-mist/80">
               {campaign.showDecemberOffer &&
                 "Primeira parcela da entrada em dezembro de 2026, conforme as condições aplicáveis e as unidades participantes. "}
               Financiamento sujeito à análise de crédito e às regras do programa Minha Casa Minha
@@ -134,10 +144,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 2 e 3. CALENDÁRIO + FORMULÁRIO ================= */}
-        <Booking />
-
-        {/* ================= 4. IDENTIFICAÇÃO COM A DOR ================= */}
+        {/* ================= 2. IDENTIFICAÇÃO COM A DOR + BOTÃO ================= */}
         <section className="bg-ink px-5 py-16 sm:py-28">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-[2rem] sm:text-5xl">
@@ -166,10 +173,14 @@ export default function Home() {
                 realidade financeira.
               </p>
             </div>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Cta />
+              <p className="text-sm text-mist">Plantão presencial em 27, 28 e 29 de novembro.</p>
+            </div>
           </div>
         </section>
 
-        {/* ================= 5. A OPORTUNIDADE ================= */}
+        {/* ================= 3. A OPORTUNIDADE ================= */}
         <section className="bg-ink-2 px-5 py-16 sm:py-24">
           <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-center">
             <figure className="relative aspect-[4/3] overflow-hidden rounded-3xl">
@@ -211,7 +222,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 6. CURIOSIDADE E EXCLUSIVIDADE ================= */}
+        {/* ================= 4. CURIOSIDADE E EXCLUSIVIDADE ================= */}
         <section className="bg-ink px-5 py-16 sm:py-28">
           <div className="mx-auto max-w-5xl">
             <h2 className="max-w-3xl text-[2rem] sm:text-5xl">
@@ -241,7 +252,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 7. EXPERIÊNCIA PRESENCIAL ================= */}
+        {/* ================= 5. EXPERIÊNCIA PRESENCIAL ================= */}
         <section className="on-paper bg-paper px-5 py-16 text-text sm:py-24">
           <div className="mx-auto max-w-5xl">
             <h2 className="max-w-3xl text-[2rem] sm:text-5xl">
@@ -287,10 +298,11 @@ export default function Home() {
                 </p>
               </div>
             </div>
+            <Cta className="mt-10">Quero participar do plantão</Cta>
           </div>
         </section>
 
-        {/* ================= 8. O EMPREENDIMENTO ================= */}
+        {/* ================= 6. O EMPREENDIMENTO ================= */}
         <section className="on-paper bg-white px-5 py-16 text-text sm:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="grid gap-8 lg:grid-cols-2 lg:items-end">
@@ -415,13 +427,14 @@ export default function Home() {
               Perspectivas e plantas meramente ilustrativas, retiradas do catálogo do
               empreendimento.
             </p>
+            <Cta className="mt-8">Quero conhecer o Villa di Napoli</Cta>
           </div>
         </section>
 
-        {/* ================= 9. ESCASSEZ E URGÊNCIA ================= */}
+        {/* ================= 7. ESCASSEZ E URGÊNCIA ================= */}
         <Scarcity />
 
-        {/* ================= 10. PERGUNTAS FREQUENTES ================= */}
+        {/* ================= 8. PERGUNTAS FREQUENTES ================= */}
         <section className="on-paper bg-paper px-5 py-16 text-text sm:py-24">
           <div className="mx-auto max-w-3xl">
             <h2 className="text-[2rem] sm:text-5xl">Perguntas frequentes</h2>
@@ -438,10 +451,11 @@ export default function Home() {
                 </details>
               ))}
             </div>
+            <Cta className="mt-10" />
           </div>
         </section>
 
-        {/* ================= 11. CTA FINAL ================= */}
+        {/* ================= 9. CHAMADA FINAL ================= */}
         <section className="relative isolate overflow-hidden px-5 py-20 sm:py-32">
           <Image
             src="/images/apartamento-02.jpg"
@@ -474,6 +488,9 @@ export default function Home() {
             </a>
           </div>
         </section>
+
+        {/* ================= 10. CALENDÁRIO + FORMULÁRIO (última seção) ================= */}
+        <Booking />
       </main>
 
       <footer className="bg-ink-2 px-5 pb-28 pt-12 text-sm text-mist md:pb-12">
